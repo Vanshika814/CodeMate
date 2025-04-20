@@ -4,28 +4,39 @@ const app = express();
 
 //handle the request
 
-app.use("/user", (req, res) =>{
-    res.send("HAHAHAHAHAHHA");
-});
-
 // 'get' will only handle the GET call for user
-app.get("/user", (req, res) =>{
-    res.send({firstname: "Vanshika", lastname: "agarwal"});
-});
+// multiple route handlers
+//app.use("/user", rH, rH2, rH3, rH4, rH5);
 
-app.post("/user", (req, res) =>{
-    //saving data to DB
-    res.send("Data successfully send ot database!");
-});
+app.get("/user", 
+    (req, res, next) =>{
+        console.log("Handling the route User 1 !!");
+        //res.send("Response !!");
+        next();
+    },
+    (req, res, next) =>{
+        console.log("Handling the route User 2 !!");
+        //res.send("Response 2 !!");
+        next();
+    },
+    (req, res, next) =>{
+        console.log("Handling the route User 3 !!");
+        //res.send("Response 3 !!");
+        next();
+    },
+    (req, res, next) =>{
+        console.log("Handling the route User 4 !!");
+        //res.send("Response 4 !!");
+        next();
+    },
+    (req, res, next) =>{
+        console.log("Handling the route User 5 !!");
+        res.send("Response 5 !!");
+        //next();
+    },
+);
 
-app.delete("/user", (req, res) =>{
-    res.send("Deleted successfully");
-})
 
-// 'use' will match all the http method API call to /test
-app.use("/test", (req, res) =>{
-    res.send("Hello from the server..");
-});
 
 
 // server listening
