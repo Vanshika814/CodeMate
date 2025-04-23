@@ -2,40 +2,26 @@ const express = require("express");
 
 const app = express();
 
-//handle the request
+const {adminAuth, UserAuth} = require("./middleware/auth");
 
-// 'get' will only handle the GET call for user
-// multiple route handlers
-//app.use("/user", rH, rH2, rH3, rH4, rH5);
+// handle auth middleware for all GET, POST......
+app.use("/admin", adminAuth);
 
-app.get("/user", 
-    (req, res, next) =>{
-        console.log("Handling the route User 1 !!");
-        //res.send("Response !!");
-        next();
-    },
-    (req, res, next) =>{
-        console.log("Handling the route User 2 !!");
-        //res.send("Response 2 !!");
-        next();
-    },
-    (req, res, next) =>{
-        console.log("Handling the route User 3 !!");
-        //res.send("Response 3 !!");
-        next();
-    },
-    (req, res, next) =>{
-        console.log("Handling the route User 4 !!");
-        //res.send("Response 4 !!");
-        next();
-    },
-    (req, res, next) =>{
-        console.log("Handling the route User 5 !!");
-        res.send("Response 5 !!");
-        //next();
-    },
-);
+app.post("/user/login", (req, res) =>{
+    res.send("user login successfull");
+});
 
+app.get("/user", UserAuth, (req, res) =>{
+    res.send("User data sent");
+});
+
+app.get("/admin/getAlldata", (req, res) =>{
+    res.send("All data sent!");
+});
+
+app.get("/admin/deleteUser", (req, res) =>{
+    res.send("Deleted the user.");
+});
 
 
 
