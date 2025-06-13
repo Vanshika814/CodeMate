@@ -53,5 +53,12 @@ authrouter.post("/login", async (req, res) =>{
     }
 })
 
+authrouter.post("/logout", async (req, res) =>{
+    res.
+    cookie("token", null, {
+        expires: new Date(Date.now()),
+    })
+    .send("logout Successfull!");
+})
 
 module.exports = authrouter;
