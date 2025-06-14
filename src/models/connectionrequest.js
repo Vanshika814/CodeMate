@@ -13,13 +13,26 @@ const connectionRequestSchema = new mongoose.Schema({
         type: String,
         required: true,
         enum: {
-            values: ["ignore","interested", "accepted", "rejected"],
+            values: ["ignored","interested", "accepted", "rejected"],
             message: `{VALUE} is incorrect status type`,
         },
     },
 },
 {
     timestamps: true
+});
+
+
+connectionRequestSchema.index({fromUserId: 1, toUserId: 1});
+
+connectionRequestSchema.pre("save" , function(next){ 
+    const connectionRequest = this;
+
+    // check if fromuserid === touserid
+    if(connectionRequest.fromUserId.equals(connectionRequest.toUserId)){
+        throw new Error("You can not send connection request to yourself!");
+    }
+    next();
 });
 
 const ConnectionRequestModel = new mongoose.model("ConnectionRequest", connectionRequestSchema);
