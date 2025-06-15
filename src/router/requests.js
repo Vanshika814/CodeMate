@@ -41,7 +41,7 @@ requestRouter.post("/request/send/:status/:toUserId", UserAuth, async (req,res)=
         const data = await connectionRequest.save();
 
         res.json({
-            message: req.user.FirstName + " is "+ status + "in " + toUser.FirstName ,
+            message: req.user.FirstName + " is "+ status + " in " + toUser.FirstName ,
             data,
         });
 
