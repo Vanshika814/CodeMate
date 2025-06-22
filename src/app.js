@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "https://devtinder-web-5xd8.onrender.com",
     credentials: true,
 }));
 app.use(express.json()); // express.json middleware
