@@ -8,9 +8,9 @@ const cors = require("cors");
 app.use(cors({
     origin: "https://devtinder-web-5xd8.onrender.com",
     credentials: true,
-}));
-app.use(express.json()); // express.json middleware
-app.use(cookieParser());
+  }));
+  app.use(express.json());
+  app.use(cookieParser());
 
 const authrouter = require("./router/auth");
 const profileRouter = require("./router/profile");
