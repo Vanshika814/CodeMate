@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 app.use(cors({
-    origin: "https://devtinder-beta.vercel.app/",
+    origin: process.env.FRONTEND_URL,
     credentials: true,
 }));
 app.use(express.json()); // express.json middleware
