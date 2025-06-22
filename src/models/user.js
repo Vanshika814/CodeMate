@@ -43,7 +43,7 @@ const UserSchema = new mongoose.Schema({
             }
         },
     },
-    photourl:{
+    photoUrl:{
         type: String,
     },
     about:{
@@ -61,7 +61,7 @@ const UserSchema = new mongoose.Schema({
 UserSchema.methods.getJWT = async function(){
 
     const user = this;
-    const token = await jwt.sign({_id : user._id}, "Dev@Tinder12", {
+    const token = await jwt.sign({_id : user._id}, process.env.JWT_SECRET, {
         expiresIn:"7d",
     });
 

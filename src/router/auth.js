@@ -22,8 +22,14 @@ authrouter.post("/signup", async (req, res) =>{
             emailId,
             password: passwordHash,
         });
-        await user.save();
-        res.send("User added Successfully!");
+        const SavedUser = await user.save();
+        const token = await SavedUser.getJWT();
+            
+            res.cookie("token", token, {
+                expires: new Date(Date.now( ) + 8 *3600000),
+            });
+
+        res.json({message: "User added Successfully!", data: SavedUser});
     } catch (err) {
         res.status(400).send("ERROR : " + err.message);
     }
@@ -43,7 +49,7 @@ authrouter.post("/login", async (req, res) =>{
             
             res.cookie("token", token, {expires: new Date(Date.now( ) + 8 *3600000),
             });
-            res.send("Login Successfull!");
+            res.send(user);
         } else {
             throw new Error("Invalid Credentials");
         }
