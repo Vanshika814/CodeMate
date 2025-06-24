@@ -1,9 +1,9 @@
 const express = require("express");
 const profileRouter = express.Router();
-const {UserAuth} = require("../middleware/auth");
+const { requireClerkAuth } = require("../middleware/auth");
 const {ValidateProfileData} = require("../utils/validation")
 
-profileRouter.get("/profile/view",UserAuth, async (req, res) =>{
+profileRouter.get("/profile/view", requireClerkAuth, async (req, res) =>{
     try{
         const user = req.user;
         res.send(user);
@@ -13,7 +13,7 @@ profileRouter.get("/profile/view",UserAuth, async (req, res) =>{
     }
 });
 
-profileRouter.patch("/profile/edit", UserAuth, async (req, res) =>{
+profileRouter.patch("/profile/edit", requireClerkAuth, async (req, res) =>{
     try{
 
        if(!ValidateProfileData (req)){

@@ -1,12 +1,12 @@
 const express = require("express");
-const {UserAuth}  = require("../middleware/auth");
+const {requireClerkAuth}  = require("../middleware/auth");
 const userRouter = express.Router();
 const connectionRequest = require("../models/connectionrequest"); 
 const USER_SAFE_DATA = "FirstName LastName photoUrl age gender about skills";
 const User = require("../models/user");
 
 //GeT ALL THE PENDING CONECTION REQUEST FOR THE LOGGEDIN USER
-userRouter.get("/user/request/received", UserAuth, async (req, res) =>{
+userRouter.get("/user/request/received", requireClerkAuth, async (req, res) =>{
     try{
         const loggedInuser = req.user;
 
@@ -25,7 +25,7 @@ userRouter.get("/user/request/received", UserAuth, async (req, res) =>{
     };
 });
 
-userRouter.get("/user/connections", UserAuth, async (req, res) =>{
+userRouter.get("/user/connections", requireClerkAuth, async (req, res) =>{
     try{
          const loggedInuser = req.user;
 
@@ -50,7 +50,7 @@ userRouter.get("/user/connections", UserAuth, async (req, res) =>{
     };
 });
 
-userRouter.get("/feed", UserAuth, async (req, res) =>{
+userRouter.get("/feed", requireClerkAuth, async (req, res) =>{
     try{
         const loggedInuser = req.user;
 

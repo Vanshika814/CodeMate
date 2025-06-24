@@ -5,32 +5,89 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+// Configure CORS to work with Clerk
 app.use(cors({
-    origin: "https://devtinder-web-5xd8.onrender.com",
+    origin: [
+        "https://devtinder-web-5xd8.onrender.com",
+        "http://localhost:5173", // For local development
+        "https://localhost:5173" // For HTTPS local development
+    ],
     credentials: true,
-  }));
-  app.use(express.json());
-  app.use(cookieParser());
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-clerk-session-id']
+}));
 
+// Webhook route needs to be before express.json() middleware
 const authrouter = require("./router/auth");
+app.use("/", authrouter);
+
+// Regular JSON parsing for other routes
+app.use(express.json());
+app.use(cookieParser());
+
+// Import other routers
 const profileRouter = require("./router/profile");
 const requestRouter = require("./router/requests");
 const userRouter = require("./router/user");
 
-app.use("/", authrouter);
+// Use other routers
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
 
+// Health check endpoint
+app.get("/health", (req, res) => {
+    res.status(200).json({ 
+        status: "OK", 
+        message: "DevTinder API is running with Clerk + MongoDB",
+        timestamp: new Date().toISOString(),
+        features: {
+            clerk_auth: true,
+            mongodb: true,
+            webhooks: true
+        }
+    });
+});
 
+// Test endpoint to check if server is working
+app.get("/", (req, res) => {
+    res.json({
+        message: "🚀 DevTinder API Server",
+        status: "Running",
+        endpoints: {
+            health: "/health",
+            auth_status: "/auth-status",
+            me: "/me",
+            auto_sync: "/auto-sync",
+            profile: "/profile/view",
+            feed: "/feed"
+        }
+    });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+    console.error("🔥 Global error:", err);
+    res.status(500).json({ 
+        error: "Internal server error",
+        message: process.env.NODE_ENV === 'development' ? err.message : "Something went wrong"
+    });
+});
+
+// Connect to database and start server
 connectDB()
-    .then(() =>{
-        console.log("Database connection established...");
-        // listening to server
-        app.listen(process.env.PORT, () =>{
-            console.log(`Server is successfully listening to port ${process.env.PORT}!`);
+    .then(() => {
+        console.log("✅ Database connection established...");
+        
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`🚀 Server is successfully listening on port ${PORT}!`);
+            console.log(`🌐 Health check: http://localhost:${PORT}/health`);
+            console.log(`🔐 Auth status: http://localhost:${PORT}/auth-status`);
+            console.log(`📝 API docs: http://localhost:${PORT}/`);
         });
     })
-    .catch((err) =>{
-        console.log("Database cannnot be connected!!");
+    .catch((err) => {
+        console.error("❌ Database connection failed:", err);
+        process.exit(1);
     });

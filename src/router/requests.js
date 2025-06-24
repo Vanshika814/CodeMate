@@ -1,10 +1,10 @@
 const express = require("express");
 const requestRouter = express.Router();
-const {UserAuth} = require("../middleware/auth");
+const {requireClerkAuth} = require("../middleware/auth");
 const ConnectionRequest = require("../models/connectionrequest");
 const User = require("../models/user");
 
-requestRouter.post("/request/send/:status/:toUserId", UserAuth, async (req,res)=>{
+requestRouter.post("/request/send/:status/:toUserId", requireClerkAuth, async (req,res)=>{
 
     try {
         const fromUserId = req.user._id;
@@ -51,7 +51,7 @@ requestRouter.post("/request/send/:status/:toUserId", UserAuth, async (req,res)=
 });
 
 
-requestRouter.post("/request/review/:status/:requestId", UserAuth, async (req,res) =>{
+requestRouter.post("/request/review/:status/:requestId", requireClerkAuth, async (req,res) =>{
     try{
         const loggedInuser = req.user;
         const {status, requestId} = req.params;

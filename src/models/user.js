@@ -4,6 +4,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const UserSchema = new mongoose.Schema({
+    clerkId: {
+        type: String,
+        unique: true,
+        required: true,
+        index: true,
+    },
     FirstName: {
         type: String,
         index: true,
@@ -28,7 +34,7 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: false, // Not required for Clerk users
     },
     age: {
         type: Number,
@@ -59,24 +65,20 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.methods.getJWT = async function(){
-
     const user = this;
     const token = await jwt.sign({_id : user._id}, process.env.JWT_SECRET, {
         expiresIn:"7d",
     });
-
     return token;
 }
 
 UserSchema.methods.validatePassword = async function(passwordInputbyuser){
     const user = this;
     const passwordHash = user.password;
-
     const isPasswordVaild = await bcrypt.compare(
         passwordInputbyuser, 
         passwordHash
     );
-
     return isPasswordVaild;
 }
 
