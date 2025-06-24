@@ -137,33 +137,33 @@ authrouter.post("/webhook/user", express.raw({ type: 'application/json' }), asyn
   }
 });
 
-// Auto-sync endpoint - tries to create user from Clerk data if not exists
+// Auto-sync endpoint - tries to create or update user from Clerk data if not exists
 authrouter.post("/auto-sync", clerkAuth, async (req, res) => {
   try {
     const clerkUserId = req.auth.userId;
     
-    // Check if user already exists
-    let user = await User.findOne({ clerkId: clerkUserId });
-    
-    if (user) {
-      return res.status(200).json({ 
-        message: "User already synced", 
-        user: user 
-      });
-    }
-    
-    // Get user data from Clerk and create in MongoDB
+    // Get user data from Clerk and upsert in MongoDB
     const { clerkClient } = require("@clerk/clerk-sdk-node");
     const clerkUser = await clerkClient.users.getUser(clerkUserId);
     
-    user = new User({
-      clerkId: clerkUserId,
-      FirstName: clerkUser.firstName || "User",
-      LastName: clerkUser.lastName || "",
-      emailId: clerkUser.emailAddresses[0]?.emailAddress || "",
-    });
-    
-    await user.save();
+    // Upsert user by clerkId or emailId
+    const user = await User.findOneAndUpdate(
+      {
+        $or: [
+          { clerkId: clerkUserId },
+          { emailId: clerkUser.emailAddresses[0]?.emailAddress }
+        ]
+      },
+      {
+        $set: {
+          clerkId: clerkUserId,
+          FirstName: clerkUser.firstName || "User",
+          LastName: clerkUser.lastName || "",
+          emailId: clerkUser.emailAddresses[0]?.emailAddress || "",
+        }
+      },
+      { upsert: true, new: true }
+    );
     
     res.status(201).json({ 
       message: "User auto-synced successfully", 

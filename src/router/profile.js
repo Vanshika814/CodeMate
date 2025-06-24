@@ -6,10 +6,16 @@ const {ValidateProfileData} = require("../utils/validation")
 profileRouter.get("/profile/view", requireClerkAuth, async (req, res) =>{
     try{
         const user = req.user;
-        res.send(user);
+        if (!user) {
+            return res.status(404).json({
+                error: "User not found in MongoDB. Please sync your account.",
+                action: "Call /auto-sync after Clerk signup."
+            });
+        }
+        res.json(user);
     }
     catch (err) {
-        res.status(400).send("ERROR : " + err.message);
+        res.status(500).json({ error: err.message });
     }
 });
 
