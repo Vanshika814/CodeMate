@@ -4,6 +4,8 @@ const connectDB = require("./config/database");
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require("http");
+
 
 // Configure CORS to work with Clerk
 app.use(cors({
@@ -29,11 +31,18 @@ app.use(cookieParser());
 const profileRouter = require("./router/profile");
 const requestRouter = require("./router/requests");
 const userRouter = require("./router/user");
+const initializeSocket = require("./utils/socket");
+const chatRouter = require('./router/chat');
+
 
 // Use other routers
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
+app.use("/", chatRouter);
+
+const server = http.createServer(app);
+initializeSocket(server);
 
 // Health check endpoint
 app.get("/health", (req, res) => {
@@ -80,7 +89,7 @@ connectDB()
         console.log("✅ Database connection established...");
         
         const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
+        server.listen(PORT, () => {
             console.log(`🚀 Server is successfully listening on port ${PORT}!`);
             console.log(`🌐 Health check: http://localhost:${PORT}/health`);
             console.log(`🔐 Auth status: http://localhost:${PORT}/auth-status`);
