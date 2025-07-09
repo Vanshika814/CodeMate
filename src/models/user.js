@@ -38,7 +38,8 @@ const UserSchema = new mongoose.Schema({
     },
     age: {
         type: Number,
-        min: 18,
+        min: 12,
+        max:100
     }, 
     gender: {
         type: String,
@@ -54,11 +55,50 @@ const UserSchema = new mongoose.Schema({
     },
     about:{
         type: String,
-        default: "This is the default about me section!"
+        default: "This is the default about me section!",
+        maxlength: 500
     },
     skills:{
         type: [String]
+    },
+    techStack:{
+        type: [String]
+    },
+    bioAnswers: {
+        type: [
+            {
+                prompt: String,
+                answer: String
+            }
+        ],
+        default: []
+    },
+    socialLinks: {
+        github: { type: String },
+        linkedin: { type: String },
+        portfolio: { type: String },
+        twitter: { type: String }
+    },
+    projects: {
+        type: [
+            {
+                title: String,
+                description: String,
+                techUsed: [String],
+                githubLink: String,
+                imageUrl: String
+            }
+        ],
+        default: []
+    },
+    availability: {
+        openTo: [String], // ["freelance", "hackathons", "internship"]
+    },
+    location: {
+        city: String,
+        country: String,
     }
+    
 },
 {
     timestamps: true,
