@@ -5,7 +5,7 @@ const connectionRequest = require("../models/connectionrequest");
 const USER_SAFE_DATA = "FirstName LastName photoUrl age gender about skills";
 const User = require("../models/user");
 
-//GeT ALL THE PENDING CONECTION REQUEST FOR THE LOGGEDIN USER
+//GET ALL THE PENDING CONECTION REQUEST FOR THE LOGGEDIN USER
 userRouter.get("/user/request/received", requireClerkAuth, async (req, res) =>{
     try{
         const loggedInuser = req.user;

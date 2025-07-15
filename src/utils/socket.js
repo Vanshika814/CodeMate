@@ -34,7 +34,7 @@ const initializeSocket = (server) => {
         },
     });
     io.on("connection" , (socket) => {
-        //handle events
+        //handle websocket events
         socket.on("joinChat", ({FirstName, userId, targetId}) => {
             const roomId = getSecretRoomId(userId, targetId);
             console.log(FirstName + " Joined Room : " + roomId);

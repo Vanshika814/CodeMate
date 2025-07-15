@@ -34,7 +34,7 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: false, // Not required for Clerk users
+        required: false, // Not required for Clerk users can be ignored
     },
     age: {
         type: Number,

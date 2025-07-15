@@ -3,7 +3,7 @@ const UploadRouter = express.Router();
 const cloudinary = require('../utils/cloudinary');
 
 UploadRouter.post('/upload/project', async (req, res) => {
-  const { image } = req.body; // image is expected as a base64 string
+  const { image } = req.body; // images are expected as a base64 string
 
   try {
     const uploaded = await cloudinary.uploader.upload(image, {
