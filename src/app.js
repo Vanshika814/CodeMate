@@ -16,30 +16,33 @@ app.use(cors({
     ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-clerk-session-id']
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-clerk-session-id', 'Access-Control-Allow-Origin'],
+    optionsSuccessStatus: 200 // For legacy browser support
 }));
 
-// Webhook route needs to be before express.json() middleware
-const authrouter = require("./router/auth");
-app.use("/", authrouter);
+// Handle preflight requests explicitly
+app.options('*', cors());
 
-// Regular JSON parsing for other routes
-app.use(express.json());
+// JSON parsing middleware
+app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 
-// Import other routers
+// Import routers
+const authrouter = require("./router/auth");
 const profileRouter = require("./router/profile");
 const requestRouter = require("./router/requests");
 const userRouter = require("./router/user");
+const uploadRouter = require("./router/upload");
 const initializeSocket = require("./utils/socket");
 const chatRouter = require('./router/chat');
 
-
-// Use other routers
-app.use("/", profileRouter);
-app.use("/", requestRouter);
-app.use("/", userRouter);
-app.use("/", chatRouter);
+// Mount routers with Express v5 compatibility
+app.use(authrouter);
+app.use(profileRouter);
+app.use(requestRouter);
+app.use(userRouter);
+app.use(uploadRouter);
+app.use(chatRouter);
 
 const server = http.createServer(app);
 initializeSocket(server);

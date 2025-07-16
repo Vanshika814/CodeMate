@@ -30,7 +30,11 @@ const formatRelativeTime = (date) => {
 const initializeSocket = (server) => {
     const io = socket(server, {
         cors: {
-            origin: "http://localhost:5173",
+            origin: [
+                "http://localhost:5173",
+                "https://devtinder-web-5xd8.onrender.com"
+            ],
+            credentials: true
         },
     });
     io.on("connection" , (socket) => {
