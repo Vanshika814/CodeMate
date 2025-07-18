@@ -10,7 +10,7 @@ const http = require("http");
 // Configure CORS to work with Clerk
 app.use(cors({
     origin: [
-        "https://devtinder-web-5xd8.onrender.com",
+        "https://codemates.pages.dev",
         "http://localhost:5173", // For local development
         "https://localhost:5173" // For HTTPS local development
     ],
