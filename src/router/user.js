@@ -2,7 +2,7 @@ const express = require("express");
 const {requireClerkAuth}  = require("../middleware/auth");
 const userRouter = express.Router();
 const connectionRequest = require("../models/connectionrequest"); 
-const USER_SAFE_DATA = "FirstName LastName photoUrl age gender about skills";
+const USER_SAFE_DATA = "FirstName LastName photoUrl age gender about skills projects bioAnswers availability";
 const User = require("../models/user");
 
 //GET ALL THE PENDING CONECTION REQUEST FOR THE LOGGEDIN USER

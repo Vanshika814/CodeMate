@@ -71,7 +71,7 @@ const initializeSocket = (server) => {
                     senderId: userId, 
                     text,
                 });
-                io.to(roomId).emit("messageReceived", {FirstName, text, senderId: userId, timestamp: formatRelativeTime(messageTimestamp)});
+                io.to(roomId).emit("messageReceived", {FirstName, text, senderId: userId, timestamp: messageTimestamp.toISOString()});
                 await chat.save();
 
             } catch(err){

@@ -52,6 +52,7 @@ const UserSchema = new mongoose.Schema({
     },
     photoUrl:{
         type: String,
+        default: "https://via.placeholder.com/400x400?text=No+Photo"
     },
     about:{
         type: String,
