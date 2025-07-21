@@ -52,7 +52,7 @@ const UserSchema = new mongoose.Schema({
     },
     photoUrl:{
         type: String,
-        default: "https://via.placeholder.com/400x400?text=No+Photo"
+        default: "https://res.cloudinary.com/dgfirvf4b/image/upload/v1753101173/download_8_yi0fsk.jpg"
     },
     about:{
         type: String,
