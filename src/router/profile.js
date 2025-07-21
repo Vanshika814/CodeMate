@@ -6,6 +6,7 @@ const {ValidateProfileData} = require("../utils/validation")
 profileRouter.get("/profile/view", requireClerkAuth, async (req, res) =>{
     try{
         const user = req.user;
+        console.log("[PROFILE VIEW] Returning user:", user);
         if (!user) {
             return res.status(404).json({
                 error: "User not found in MongoDB. Please sync your account.",
