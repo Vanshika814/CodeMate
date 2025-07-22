@@ -1,90 +1,137 @@
-# DevTinder
+# CodeMate Backend 👩‍💻❤️‍🔥
 
-DevTinder is a platform designed to connect developers, enabling them to network, collaborate, and discover new opportunities. It allows users to create profiles, send connection requests, and manage their professional relationships.
+A platform connecting developers based on their skills, projects, and interests. CodeMate API provides the backend infrastructure for user authentication, profile management, connection requests, real-time chat, and more. It aims to solve the problem of finding and connecting with like-minded developers for collaboration, networking, and mentorship opportunities.
 
-## Core Features
+## 🚀 Key Features
 
-*   *User Authentication:* Secure user registration, login, and logout functionality using JWT tokens and bcrypt for password hashing.
-*   *User Profiles:* Create and manage user profiles with details like name, age, photo, about, and skills.
-*   *Connection Requests:* Send, receive, accept, and reject connection requests between users.
-*   *User Feed:* Discover new users to connect with based on connection status.
-*   *Profile Viewing and Editing:* Ability to view and edit user profile information.
+- **User Authentication:** Secure user authentication and management using Clerk.
+- **Profile Management:** Create, view, and edit developer profiles with skills, projects, and social links.
+- **Connection Requests:** Send, accept, and reject connection requests to build your network.
+- **Real-time Chat:** Engage in real-time conversations with other developers using WebSockets.
+- **Image Uploads:** Upload project and profile images to Cloudinary.
+- **User Feed:** Discover new developers based on your interests and connections.
+- **API Health Check:** Provides a health check endpoint to monitor the API status.
 
-## Project Structure
+## 🛠️ Tech Stack
 
+*   **Backend:** Node.js, Express.js
+*   **Database:** MongoDB, Mongoose
+*   **Authentication:** Clerk
+*   **Real-time Communication:** Socket.IO
+*   **Cloud Storage:** Cloudinary
+*   **Environment Variables:** Dotenv
+*   **CORS:** Cors
+*   **Cookie Parsing:** Cookie-parser
+*   **Validation:** validator
+*   **Cryptography:** bcrypt, jsonwebtoken, crypto (Node.js built-in)
 
-DevTinder/
-├── src/
-│   ├── app.js                  # Main entry point: initializes the Express server, database connection, and routes.
-│   ├── config/
-│   │   └── database.js         # Establishes the MongoDB database connection.
-│   ├── middleware/
-│   │   └── auth.js             # Authentication middleware using JWT tokens.
-│   ├── models/
-│   │   ├── user.js             # Defines the User Mongoose schema and model.
-│   │   └── connectionrequest.js# Defines the ConnectionRequest Mongoose schema and model.
-│   ├── router/
-│   │   ├── auth.js             # Authentication routes (signup, login, logout).
-│   │   ├── profile.js          # User profile routes (view, edit).
-│   │   ├── requests.js         # Connection request routes (send, review).
-│   │   └── user.js             # User routes (received requests, connections, feed).
-│   ├── utils/
-│   │   └── validation.js       # Data validation utilities for user input.
-├── package.json            # Lists project dependencies and scripts.
-├── README.md               # Project documentation.
+## 📦 Getting Started
 
+### Prerequisites
 
-## Setup Instructions
+- Node.js (v18 or higher)
+- MongoDB account and connection string
+- Clerk account and API keys
+- Cloudinary account and API keys
+- `npm` or `yarn` package manager
 
-1.  *Clone the repository:*
+### Installation
 
-    bash
-    git clone <repository_url>
-    cd DevTinder
-    
+1.  Clone the repository:
 
-2.  *Install dependencies:*
+    ```bash
+    git clone <repository-url>
+    cd <repository-directory>
+    ```
 
-    bash
+2.  Install dependencies:
+
+    ```bash
     npm install
-    
+    # or
+    yarn install
+    ```
 
-3.  *Configure the database:*
+3.  Configure environment variables:
 
-    *   Set up a MongoDB Atlas cluster and database.
-    *   Update the connection string in src/config/database.js with your MongoDB Atlas connection details.
+    - Create a `.env` file in the root directory.
+    - Add the following environment variables, replacing the placeholders with your actual values:
 
-4.  *Start the server:*
+    ```
+    DB_CONNECTION_STRING=<your_mongodb_connection_string>
+    CLOUDINARY_CLOUD_NAME=<your_cloudinary_cloud_name>
+    CLOUDINARY_API_KEY=<your_cloudinary_api_key>
+    CLOUDINARY_API_SECRET=<your_cloudinary_api_secret>
+    CLERK_SECRET_KEY=<your_clerk_secret_key>
+    JWT_SECRET=<your_jwt_secret>
+    FRONTEND_URL=<your_frontend_url> # e.g., https://devtinder.render.com
+    ```
 
-    bash
+### Running Locally
+
+1.  Start the server:
+
+    ```bash
     npm start
-    
+    # or
+    yarn start
+    ```
 
-    The server will start listening on port 3000 (or the port specified in your environment).
+2.  The API server will be running on `http://localhost:<PORT>` (default port is likely 3000, check your `app.js`).
 
-## API Endpoints
+## 📂 Project Structure
 
-Refer to the individual router files (src/router) for detailed information about available API endpoints and their usage. Key endpoints include:
+```
+├── src/
+│   ├── app.js             # Main entry point for the API server
+│   ├── config/
+│   │   └── database.js    # MongoDB database connection configuration
+│   ├── middleware/
+│   │   └── auth.js        # Authentication middleware using Clerk
+│   ├── models/
+│   │   ├── chat.js        # Mongoose model for chat messages
+│   │   ├── connectionrequest.js # Mongoose model for connection requests
+│   │   └── user.js        # Mongoose model for user data
+│   ├── router/
+│   │   ├── auth.js        # Authentication routes (Clerk webhooks, sync)
+│   │   ├── chat.js        # Chat routes
+│   │   ├── profile.js     # Profile routes (view, edit)
+│   │   ├── requests.js    # Connection request routes (send, review)
+│   │   ├── upload.js      # Image upload routes (Cloudinary)
+│   │   └── user.js        # User routes (requests, connections, feed)
+│   ├── utils/
+│   │   ├── cloudinary.js  # Cloudinary configuration
+│   │   ├── socket.js      # WebSocket initialization and handling
+│   │   └── validation.js  # Input validation functions
+│   ├── .env               # Environment variables
+│   └── package.json         # Project dependencies and scripts
+│   └── README.md          # Project documentation
+```
 
-*   /auth/signup: User registration.
-*   /auth/login: User login.
-*   /auth/logout: User logout.
-*   /profile/view: Retrieve user profile.
-*   /profile/edit: Edit user profile.
-*   /request/send/:status/:toUserId: Send a connection request.
-*   /request/review/:status/:requestId: Review a connection request.
-*   /user/request/received: Get received connection requests.
-*   /user/user/connections: Get user connections.
-*   /user/feed: Get user feed.
+## 📸 Screenshots
 
-## Technologies Used
+(Add screenshots of the API endpoints in action here)
 
-*   Node.js
-*   Express.js
-*   MongoDB
-*   Mongoose
-*   JSON Web Tokens (JWT)
-*   bcrypt
-*   validator
-*   cors
-*   cookie-parser
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1.  Fork the repository.
+2.  Create a new branch for your feature or bug fix.
+3.  Make your changes and commit them with descriptive messages.
+4.  Push your changes to your fork.
+5.  Submit a pull request to the main repository.
+
+## 📝 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## 📬 Contact
+
+Vanshika Agarwal - vanshikaagarwal781@gmail.com
+
+## 💖 Thanks Message
+
+Thank you for checking out the CodeMate API! We hope it helps you build amazing things.
+
+This is written by [readme.ai](https://readme-generator-phi.vercel.app/).
